@@ -4,7 +4,11 @@
 
 ```shell
 git clone git@github.com:VitaTsui/my-project.git
-cd my-project
+```
+
+## 安装项目
+
+```shell
 npm install
 ```
 

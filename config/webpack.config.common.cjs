@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const config = {
   entry: {
@@ -11,20 +12,54 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.png$/i,
+        type: "asset/resource",
+      },
+      {
         test: /\.ts(x)?$/,
         exclude: /node_modules/,
-        use: ["ts-loader"],
+        use: ["babel-loader"],
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                auto: true,
+                localIdentName: "[local]--[hash:base64:5]",
+                getLocalIdent: (_, __, localName) => {
+                  if (localName.startsWith("ant-")) {
+                    return localName;
+                  }
+
+                  return undefined;
+                },
+              },
+            },
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [require("autoprefixer")],
+              },
+            },
+          },
+        ],
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      //模板路径，注意需要和index.html路径对应
       template: path.resolve(__dirname, "../public/index.html"),
     }),
   ],
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".jsx"],
+    extensions: [".tsx", ".ts", ".cts", ".mts", ".js", ".jsx", ".cjs", ".mjs"],
     alias: {
       "@": path.resolve(__dirname, "../src"),
     },
