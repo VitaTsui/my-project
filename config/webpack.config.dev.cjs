@@ -44,6 +44,7 @@ const config = {
       overlay: false,
     },
     hot: true,
+    historyApiFallback: true,
     compress: false,
   },
 };
