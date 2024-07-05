@@ -9,10 +9,11 @@ module.exports = (env) => {
   switch (true) {
     case env.development:
       const _devConfig = merge(commonConfig, developmentConfig);
+
       return new Promise((resolve, reject) => {
         portfinder.getPort(
           {
-            port: 8080,
+            port: _devConfig.devServer.port,
             stopPort: 65535,
           },
           (err, port) => {
